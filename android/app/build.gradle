@@ -84,6 +84,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        resValue "bool", "usesCleartextTraffic", "true"
+
     }
     signingConfigs {
         debug {
@@ -117,3 +119,4 @@ dependencies {
         implementation jscFlavor
     }
 }
+
