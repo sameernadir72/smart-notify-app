@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../api/axiosConfig';
+import { registerForPushNotifications } from '../utils/pushNotifications';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -11,11 +12,15 @@ export default function LoginScreen({ navigation }) {
     try {
       // 1. Hit your NestJS Backend
       const response = await api.post('/auth/login', { email, password });
+      console.log("🚀 ~ handleLogin ~ response:", response)
       // 2. Extract and Save the JWT Token
       const token = response.data.access_token;
       await AsyncStorage.setItem('access_token', token);
-      
-      // 3. Navigate to Dashboard
+
+      // 3. Register this device for push notifications
+      registerForPushNotifications();
+
+      // 4. Navigate to Dashboard
       navigation.replace('Dashboard');
     } catch (error) {
       Alert.alert('Login Failed', 'Invalid email or password');
